@@ -23,11 +23,11 @@ class Session
 
     public function set_flashdata($key, $value = null)
     {
-        if ($value !== null) {
-            $_SESSION['_flash'][$key] = $value;
+        if ($value != null) {
+            $_SESSION['flash'][$key] = $value;
         } else {
-            $data = $_SESSION['_flash'][$key] ?? null;
-            unset($_SESSION['_flash'][$key]);
+            $data = $_SESSION['flash'][$key] ?? null;
+            unset($_SESSION['flash'][$key]);
             return $data;
         }
     }

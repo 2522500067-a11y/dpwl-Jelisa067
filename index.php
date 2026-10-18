@@ -1,23 +1,40 @@
 <?php
 require_once 'config/autoload.php';
 require_once 'config/routes.php';
+require_once 'config/config.php';
+require_once 'helper/url_helper.php';
+require_once 'config/session.php';
 
-$url = $_GET['url'] ?? $route['default_controller'] . '/index';
-if ($url == '') {
-    // $url = $route['default_controller']. '/index';
-}
-
+$url = $_GET['url']?? $route['default_controller']. '/index';
 $url = trim($url, '/');
 $segment = explode('/', $url);
-$controller = $segment[0]?? $route['default_controller'];
-$method = $segment[1]?? 'index';
-$parameter = $segment[2]?? null;
 
-$controllerName = ucfirst($controller);
-$controllerName = ucfirst($segment[0]);
-$controllerFile = 'controller/'. $controllerName. '.php';
-// if (file_exists($controllerFile)) {
-// require_once $controllerFile;
+// CEK APAKAH URL PAKE FOLDER (c_master/Mobil_C/index) ATAU ENGGAK (Login_C/index)
+if (count($segment) >= 2 && is_dir('controller/'. $segment[0])) {
+    // ADA FOLDER MISAL: c_master/Mobil_C/index
+    $folder = $segment[0];
+    $controller = $segment[1]?? $route['default_controller'];
+    $method = $segment[2]?? 'index';
+    $parameter = $segment[3]?? null;
+    $controllerFile = 'controller/'. $folder. '/'. $controller. '.php';
+    $controllerName = $controller;
+} else {
+    // GAK ADA FOLDER MISAL: Login_C/index (punya kamu yang lama)
+    $controller = $segment[0]?? $route['default_controller'];
+    $method = $segment[1]?? 'index';
+    $parameter = $segment[2]?? null;
+
+    // Biar Login_C tetap Login_C
+    if (strtolower($controller) === 'login_c') {
+        $controllerName = 'Login_C';
+    } else {
+        $controllerName = ucfirst($controller);
+    }
+    $controllerFile = 'controller/'. $controllerName. '.php';
+}
+
+if (file_exists($controllerFile)) {
+    require_once $controllerFile;
     $objController = new $controllerName();
     if (method_exists($objController, $method)) {
         if ($parameter!== null) {
@@ -26,8 +43,8 @@ $controllerFile = 'controller/'. $controllerName. '.php';
             $objController->$method();
         }
     } else {
-        echo "Method tidak ditemukan.";
+        echo "Method $method tidak ditemukan di $controllerName";
     }
-// } else {
-// echo "Controller tidak ditemukan.";
-// }
+} else {
+    echo "Controller file tidak ditemukan: $controllerFile - URL kamu: $url";
+}
