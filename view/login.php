@@ -3,9 +3,12 @@
 <head>
 <meta charset="utf-8">
 <title>AdminLTE 3 | Log in</title>
+<!-- Google Font: Source Sans Pro -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="<?= base_url('AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css') ?>">
+<!-- AdminLTE CSS -->
+<link rel="stylesheet" href="<?= base_url('AdminLTE-3.2.0/dist/css/adminlte.min.css') ?>">
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
@@ -44,5 +47,12 @@ if (!empty($psn)) {
     </div>
   </div>
 </div>
+
+<!-- jQuery -->
+<script src="<?= base_url('AdminLTE-3.2.0-rc/plugins/jquery/jquery.min.js') ?>"></script>
+<!-- Bootstrap 4 -->
+<script src="<?= base_url('AdminLTE-3.2.0-rc/plugins/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
+<!-- AdminLTE App -->
+<script src="<?= base_url('AdminLTE-3.2.0-rc/dist/js/adminlte.min.js') ?>"></script>
 </body>
 </html>

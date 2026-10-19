@@ -5,7 +5,7 @@ function base_url($path = '')
     
     // FIX BIAR GAK NULL LAGI
     if (!isset($config) || !isset($config['base_url']) || $config['base_url'] == null) {
-        $config['base_url'] = 'http://localhost/dpwl-Mesi074/';
+        $config['base_url'] = 'http://localhost/dpwl-Jelisa067/';
     }
     
     return rtrim($config['base_url'], '/') . '/' . ltrim($path, '/');
