@@ -1,15 +1,21 @@
+
 <?php
 class Login_C extends Controller
 {
+    public function __construct()
+    {
+        // Session sudah dipanggil melalui index.php
+    }
+
     public function index()
     {
-        $psn = '';
-        if (method_exists($this->session, 'userdata')) {
-            $psn = $this->session->userdata('pesan');
-        }
+        $psn = isset($_SESSION['pesan'])
+            ? $_SESSION['pesan'] : '';
 
         $data['psn'] = $psn;
-        $this->load->view('login', $data);
+
+        // Memanggil view login secara langsung
+        include dirname(__DIR__) . '/view/login.php';
     }
 
     public function CekLogin()
@@ -19,18 +25,22 @@ class Login_C extends Controller
             return;
         }
 
-        $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+        $email = isset($_POST['email'])
+            ? trim($_POST['email']) : '';
+
         $password = isset($_POST['pass'])
             ? trim($_POST['pass'])
-            : (isset($_POST['password']) ? trim($_POST['password']) : '');
+            : (isset($_POST['password'])
+                ? trim($_POST['password']) : '');
 
-        // LOGIN KHUSUS JELISA067
-        if ($email == 'jelisa067@mahasiswa.atmaluhur.ac.id'
-            && $password == '12345') {
-
-            $this->session->set_userdata('emailuser', $email);
-            $this->session->set_userdata('nm_user', 'Jelisa Dewi Komariah - 067');
-            $this->session->set_userdata('pesan', '');
+        // LOGIN KHUSUS JELISA
+        if (
+            $email == 'Jelisa067@atmaluhur.ac.id'
+            && $password == '12345'
+        ) {
+            $_SESSION['emailuser'] = $email;
+            $_SESSION['nm_user'] = 'Jelisa - 067';
+            $_SESSION['pesan'] = '';
 
             redirect('Admin_C/index');
             return;
@@ -43,22 +53,20 @@ class Login_C extends Controller
         $datauser = $loginModel->ambildata($email);
 
         if ($datauser && $password == $datauser['password']) {
-            $this->session->set_userdata('emailuser', $email);
-            $this->session->set_userdata('nm_user', 'Jelisa Dewi Komariah - 067');
+
+            $_SESSION['emailuser'] = $email;
+            $_SESSION['nm_user'] = $datauser['nm_user'];
 
             redirect('Admin_C/index');
-        } else {
-            $this->session->set_userdata(
-                'pesan',
-                'Gagal: Silahkan cek email, password, atau status akun Anda...'
-            );
+            return;
 
-            $this->session->set_flashdata(
-                'pesan',
-                'Gagal: Silahkan cek email, password, atau status akun Anda...'
-            );
+        } else {
+
+            $_SESSION['pesan'] =
+                'Gagal: Silahkan cek email, password, atau status akun Anda...';
 
             redirect('Login_C/index');
+            return;
         }
     }
 }
